@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  gopass-external-secrets:
+    build: .
+    container_name: gopass-external-secrets
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    env_file:
+      - .env
