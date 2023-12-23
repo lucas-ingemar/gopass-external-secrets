@@ -21,27 +21,30 @@ RUN git clone https://github.com/gopasspw/gopass.git
 WORKDIR /gopass-api/gopass
 RUN make build
 
-# COPY go.sum ./
-# COPY go.mod ./
+WORKDIR /gopass-external-secrets
+COPY go.sum ./
+COPY go.mod ./
+COPY cmd ./cmd
+COPY internal ./internal
 
-# RUN go mod download
+RUN go mod download
+RUN go build -o ./gopass-external-secrets cmd/gopass-external-secrets/main.go
 
-# COPY cmd ./cmd
 # COPY i18n ./i18n
-# COPY internal ./internal
 # COPY migrations ./migrations
 
-# RUN go build -o /go_app cmd/main.go
 
 FROM vladgh/gpg
-COPY --from=builder /gopass-api/gopass-jsonapi/gopass-jsonapi /bin/gopass-jsonapi
-COPY --from=builder /gopass-api/gopass/gopass/                /bin/gopass
+COPY --from=builder /gopass-api/gopass-jsonapi/gopass-jsonapi           /bin/gopass-jsonapi
+COPY --from=builder /gopass-api/gopass/gopass/                          /bin/gopass
+COPY --from=builder /gopass-external-secrets/gopass-external-secrets    /rundir/gopass-external-secrets
 # COPY --from=amacneil/dbmate:1.13 /usr/local/bin/dbmate /usr/local/bin/dbmate
 #
 
 RUN apk update && \
     apk add --update git && \
     apk add --update openssh
+# apk add --update command && \
 # apk add --update systemctl && \
 
 WORKDIR /rundir
