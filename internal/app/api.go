@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/middleware"
+	"github.com/rs/zerolog/log"
 )
 
 func Router() http.Handler {
@@ -30,5 +31,10 @@ func NewApi() *Api {
 
 func (a Api) GetParameter() http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		_, err := rw.Write([]byte(`{"value": "hejsan"}`))
+		if err != nil {
+			log.Ctx(ctx).Err(err).Msg("writing response")
+		}
 	})
 }

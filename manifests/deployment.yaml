@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gopass-external-secrets
+  namespace: gopass-external-secrets
+  labels:
+    app.kubernetes.io/name: gopass-external-secrets
+    app.kubernetes.io/instance: gopass-external-secrets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gopass-external-secrets
+      app.kubernetes.io/instance: gopass-external-secrets
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gopass-external-secrets
+        app.kubernetes.io/instance: gopass-external-secrets
+    spec:
+      containers:
+      - name: gopass-external-secrets
+        image: gopass-external-secrets:b2
+        ports:
+        - containerPort: 3000
