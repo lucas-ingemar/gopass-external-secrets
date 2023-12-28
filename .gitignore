@@ -5,3 +5,4 @@ tmp/
 
 .env
 .envrc
+manifests/tmp_secret.yaml

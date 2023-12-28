@@ -14,7 +14,7 @@ func AccessLog(next http.Handler) http.Handler {
 			Str("host", r.Host).
 			Logger()
 
-		l.Info().Msgf("%s %s", r.Method, r.RequestURI)
+		l.Debug().Msgf("%s %s", r.Method, r.RequestURI)
 		next.ServeHTTP(rw, r)
 	})
 }

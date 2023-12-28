@@ -15,7 +15,10 @@ install-external-secrets-helm:
 generate-from-helm:
 	helm template --validate --name-template external-secrets -f values.yaml -n external-secrets external-secrets/external-secrets > k8s_testfiles/external-secrets-rendered.yaml
 
-
 start-kind:
 	kind delete cluster
 	kind create cluster --config k8s_testfiles/kind.yaml
+
+deploy-external-secrets-operator:
+	kubectl create namespace external-secrets
+	kubectl apply -f k8s_testfiles/external-secrets-rendered.yaml

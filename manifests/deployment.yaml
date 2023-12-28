@@ -20,6 +20,32 @@ spec:
     spec:
       containers:
       - name: gopass-external-secrets
-        image: gopass-external-secrets:b2
+        image: gopass-external-secrets:b3
         ports:
         - containerPort: 3000
+        env:
+        - name: GPG_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: gpgSecret
+        - name: GPG_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: gpgKeyId
+        - name: SECRETS_REPO_URL
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: secretsRepoUrl
+        - name: GIT_USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: gitUserName
+        - name: GIT_USER_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: gitUserEmail

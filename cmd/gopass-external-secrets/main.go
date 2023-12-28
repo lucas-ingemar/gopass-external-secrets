@@ -1,13 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/app"
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/config"
+	"github.com/lucas-ingemar/gopass-external-secrets/internal/pass"
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/shared"
+	"github.com/robfig/cron/v3"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -23,13 +26,21 @@ func init() {
 }
 
 func main() {
-	log.Info().Msg("hej1")
-	// out, err := exec.Command("gopass", "show", "namespace1/janne").Output()
-	// if err != nil {
-	// 	log.Err(err).Msg("gopass error")
-	// }
-	// fmt.Println(string(out))
-	handler := app.Router()
+	appObj := app.NewApp(pass.GoPass{})
+	appObj.SyncGit(context.Background())
+
+	c := cron.New()
+	// Define the Cron job schedule
+	c.AddFunc(config.GIT_PULL_CRON, func() {
+		err := appObj.SyncGit(context.Background())
+		if err != nil {
+			log.Err(err).Msg("git cron error")
+		}
+	})
+	// Start the Cron job scheduler
+	c.Start()
+
+	handler := app.Router(*app.NewApi(appObj))
 	log.Info().Msgf("opening on port :%s", config.API_PORT)
 	log.Fatal().Err(http.ListenAndServe(fmt.Sprintf(":%s", config.API_PORT), handler))
 }
