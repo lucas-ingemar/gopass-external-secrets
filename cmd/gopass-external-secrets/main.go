@@ -20,8 +20,20 @@ func init() {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
+	zerolog.SetGlobalLevel(config.LOG_LEVEL)
+
 	if !shared.IsCommandAvailable("gopass") {
 		log.Fatal().Msgf("gopass is not installed. Visit %s for instructions", shared.GOPASS_GITHUB_URL)
+	}
+
+	if config.AUTH_ACTIVE {
+		if config.AUTH_USER == "" {
+			log.Fatal().Msg("env AUTH_USER not set")
+		}
+
+		if config.AUTH_PASSWORD == "" {
+			log.Fatal().Msg("env AUTH_PASSWORD not set")
+		}
 	}
 }
 

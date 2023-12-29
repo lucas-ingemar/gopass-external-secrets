@@ -3,13 +3,20 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
+
+	"github.com/rs/zerolog"
 )
 
 var (
-	DEVMODE       = getBoolEnv("DEVMODE")
+	DEVMODE       = getBoolEnv("DEVMODE", false)
+	AUTH_ACTIVE   = getBoolEnv("AUTH_ACTIVE", true)
 	API_PORT      = getenv("API_PORT", "3000")
-	GIT_COOLDOWN  = getIntEnv("GIT_COOLDOWN", 1)
+	GIT_COOLDOWN  = getIntEnv("GIT_COOLDOWN", 15)
 	GIT_PULL_CRON = getenv("GIT_PULL_CRON", "*/1 * * * *")
+	AUTH_USER     = getenv("AUTH_USER", "")
+	AUTH_PASSWORD = getenv("AUTH_PASSWORD", "")
+	LOG_LEVEL     = getLogLevel("LOG_LEVEL", zerolog.InfoLevel)
 )
 
 func getenv(key, fallback string) string {
@@ -20,9 +27,12 @@ func getenv(key, fallback string) string {
 	return value
 }
 
-func getBoolEnv(key string) bool {
+func getBoolEnv(key string, fallback bool) bool {
 	value := os.Getenv(key)
-	return len(value) != 0
+	if len(value) == 0 {
+		return fallback
+	}
+	return strings.ToLower(value) == "true"
 }
 
 func getIntEnv(key string, fallback int) int {
@@ -35,4 +45,24 @@ func getIntEnv(key string, fallback int) int {
 		return fallback
 	}
 	return intval
+}
+
+func getLogLevel(envVar string, defaultLevel zerolog.Level) zerolog.Level {
+	val := strings.ToLower(os.Getenv(envVar))
+	switch val {
+	case "debug":
+		return zerolog.DebugLevel
+	case "info":
+		return zerolog.InfoLevel
+	case "warn":
+		return zerolog.WarnLevel
+	case "error":
+		return zerolog.ErrorLevel
+	case "fatal":
+		return zerolog.FatalLevel
+	case "panic":
+		return zerolog.PanicLevel
+	default:
+		return defaultLevel
+	}
 }

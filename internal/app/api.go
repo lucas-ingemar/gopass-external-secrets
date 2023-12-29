@@ -5,6 +5,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
+	"github.com/lucas-ingemar/gopass-external-secrets/internal/config"
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/middleware"
 	"github.com/lucas-ingemar/gopass-external-secrets/internal/shared"
 	"github.com/rs/zerolog/log"
@@ -13,10 +14,11 @@ import (
 func Router(api Api) http.Handler {
 	r := httprouter.New()
 
-	// mw := alice.New(middleware.ContextLogger)
 	mw := alice.New()
+	if config.AUTH_ACTIVE {
+		mw.Append(middleware.AuthCheck)
+	}
 
-	// "message":"GET /v1/parameter/namespace1.secret.password"}
 	r.Handler("GET", "/v1/parameter/:namespace/:secret/:parameter", mw.Then(api.GetParameter()))
 
 	preRouterMw := alice.New(middleware.AccessLog)
@@ -42,23 +44,10 @@ func (a Api) GetParameter() http.Handler {
 		parameter := params.ByName("parameter")
 
 		response, err := a.app.GetParameter(ctx, namespace, secret, parameter)
-		// if err != nil {
-		// 	// FIXME: Maybe should be done in httpWriter func
-		// 	log.Ctx(ctx).Err(err).Msg("Need to map errors to codes")
-		// 	// return
-		// }
 
 		err = shared.HttpWriteResponse(ctx, rw, response, err)
 		if err != nil {
 			log.Ctx(ctx).Err(err).Msg("failed to write response")
 		}
-
-		// fmt.Println(namespace)
-		// fmt.Println(secret)
-		// fmt.Println(parameter)
-		// _, err = rw.Write([]byte(`{"value": "hejsan"}`))
-		// if err != nil {
-		// 	log.Ctx(ctx).Err(err).Msg("writing response")
-		// }
 	})
 }

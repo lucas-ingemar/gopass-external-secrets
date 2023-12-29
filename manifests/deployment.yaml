@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: gopass-external-secrets
-        image: gopass-external-secrets:b3
+        image: gopass-external-secrets:b5
         ports:
         - containerPort: 3000
         env:
@@ -49,3 +49,13 @@ spec:
             secretKeyRef:
               name: gopass-external-secrets-envs
               key: gitUserEmail
+        - name: AUTH_USER
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: authUser
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gopass-external-secrets-envs
+              key: authPassword
