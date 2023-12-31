@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: gopass-external-secrets
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: testing
