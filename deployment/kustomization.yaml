@@ -27,29 +27,29 @@ patches:
             - name: GPG_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: gopass-external-secrets-envs
+                  name: gopass-envs
                   key: gpgSecret
             - name: GPG_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: gopass-external-secrets-envs
+                  name: gopass-envs
                   key: gpgKeyId
             - name: SECRETS_REPO_URL
               valueFrom:
                 secretKeyRef:
-                  name: gopass-external-secrets-envs
+                  name: gopass-envs
                   key: secretsRepoUrl
             - name: GIT_USER_NAME
               valueFrom:
                 secretKeyRef:
-                  name: gopass-external-secrets-envs
+                  name: gopass-envs
                   key: gitUserName
             - name: GIT_USER_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: gopass-external-secrets-envs
+                  name: gopass-envs
                   key: gitUserEmail
     target:
       kind: Deployment
       name: external-secrets
-      namespace: "external-secrets"
+      namespace: external-secrets

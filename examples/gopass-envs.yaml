@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gopass-envs
+  namespace: external-secrets
+type: Opaque
+data:
+  # All the following commands needs to be base64 encoded before added to this file. (some of them are encoded twice)
+  gpgSecret: <ASCII ARMOURED PGP PRIVATE KEY> # Command to generate: gpg --export-secret-keys -a <KEY_ID> | base64 -w 0
+  gpgKeyId: <PGP PUBLIC KEY ID>
+  secretsRepoUrl: <GIT CLONE HTTP-URL TO SECRETS REPO>
+  gitUserName: <GIT USER NAME>
+  gitUserEmail: <GIT USER EMAIL>
