@@ -5,4 +5,5 @@ tmp/
 
 .env
 .envrc
-manifests/tmp_secret.yaml
+*/tmp_secret.yaml
+deployment/external-secrets-rendered.yaml

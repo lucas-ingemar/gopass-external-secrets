@@ -48,7 +48,7 @@ func (a *App) SyncGit(ctx context.Context) error {
 }
 
 func (a *App) GetParameter(ctx context.Context, namespace, secret, parameter string) (shared.Response, error) {
-	secretsPath := fmt.Sprintf("%s/%s", namespace, secret)
+	secretsPath := fmt.Sprintf("%s/%s/%s", config.GOPASS_PREFIX, namespace, secret)
 	lastSyncWithCooldown := a.lastGitSync.Add(time.Duration(config.GIT_COOLDOWN) * time.Minute)
 	if !lo.Contains(a.knownSecrets, secretsPath) && time.Now().After(lastSyncWithCooldown) {
 		err := a.SyncGit(ctx)

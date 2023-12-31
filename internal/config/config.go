@@ -12,11 +12,12 @@ var (
 	DEVMODE       = getBoolEnv("DEVMODE", false)
 	AUTH_ACTIVE   = getBoolEnv("AUTH_ACTIVE", true)
 	API_PORT      = getenv("API_PORT", "3000")
-	GIT_COOLDOWN  = getIntEnv("GIT_COOLDOWN", 15)
-	GIT_PULL_CRON = getenv("GIT_PULL_CRON", "*/1 * * * *")
+	GIT_COOLDOWN  = getIntEnv("GIT_COOLDOWN", 5)
+	GIT_PULL_CRON = getenv("GIT_PULL_CRON", "*/15 * * * *")
 	AUTH_USER     = getenv("AUTH_USER", "")
 	AUTH_PASSWORD = getenv("AUTH_PASSWORD", "")
 	LOG_LEVEL     = getLogLevel("LOG_LEVEL", zerolog.InfoLevel)
+	GOPASS_PREFIX = getenv("GOPASS_PREFIX", "external-secrets")
 )
 
 func getenv(key, fallback string) string {
