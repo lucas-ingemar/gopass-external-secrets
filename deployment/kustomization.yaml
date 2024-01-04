@@ -9,7 +9,7 @@ images:
   - name: ghcr.io/external-secrets/external-secrets
     newTag: v0.9.10
   - name: gopass-external-secrets
-    newTag: b13
+    newTag: b15
 patches:
   - patch: |
       - op: add
@@ -27,7 +27,7 @@ patches:
             - name: GIT_PULL_CRON
               value: "*/15 * * * *"
             - name: LOG_LEVEL
-              value: "info"
+              value: "debug"
             - name: GPG_SECRET
               valueFrom:
                 secretKeyRef:
@@ -43,16 +43,6 @@ patches:
                 secretKeyRef:
                   name: gopass-envs
                   key: secretsRepoUrl
-            - name: GIT_USER_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: gopass-envs
-                  key: gitUserName
-            - name: GIT_USER_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: gopass-envs
-                  key: gitUserEmail
     target:
       kind: Deployment
       name: external-secrets

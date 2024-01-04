@@ -8,9 +8,6 @@ fi
 
 mkdir -p /home/root/.config/gopass
 
-git config --global user.email "$GIT_USER_EMAIL"
-git config --global user.name "$GIT_USER_NAME"
-
 cat << EOF > /home/root/.config/gopass/config
 [mounts]
 	path = /rundir/secrets
