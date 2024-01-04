@@ -5,14 +5,18 @@ resources:
   - tmp_secret.yaml
   - external-secrets-rendered.yaml
   - cluster-secret-store.yaml
-
+images:
+  - name: ghcr.io/external-secrets/external-secrets
+    newTag: v0.9.10
+  - name: gopass-external-secrets
+    newTag: b13
 patches:
   - patch: |
       - op: add
         path: /spec/template/spec/containers/-
         value:
             name: gopass-external-secrets
-            image: gopass-external-secrets:b6
+            image: gopass-external-secrets:b5
             env:
             - name: GOPASS_PREFIX
               value: "external-secrets"
@@ -23,7 +27,7 @@ patches:
             - name: GIT_PULL_CRON
               value: "*/15 * * * *"
             - name: LOG_LEVEL
-              value: "debug"
+              value: "info"
             - name: GPG_SECRET
               valueFrom:
                 secretKeyRef:
