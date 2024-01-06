@@ -22,3 +22,6 @@ start-kind:
 deploy-external-secrets-operator:
 	kubectl create namespace external-secrets
 	kubectl apply -f k8s_testfiles/external-secrets-rendered.yaml
+
+test:
+	go test -v ./...
