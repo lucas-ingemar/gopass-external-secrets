@@ -17,14 +17,14 @@
   <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/lucas-ingemar/gopass-external-secrets/publish-container.yaml?style=flat-square&logo=github&label=Build">
 </p>
 
-Use [External Secrets Operator](https://external-secrets.io) together with [gopass](https://www.gopass.pw/). This app lets you access passwords stored in a gopass repository and use them in a kubernetes cluster. You simply create ExternalSecrets manifests with references to keys to be looked up in your gopass store.
+Use [External Secrets Operator](https://external-secrets.io) together with [gopass](https://www.gopass.pw/). This app lets you access passwords stored in a gopass repository and use them in a Kubernetes cluster. You simply create ExternalSecrets manifests with references to keys to be looked up in your gopass store.
 This makes it easy and safe to store secrets in your commited manifests.
 
-# Installation
+## Installation
 In the [deployment folder](deployment) you can find manifests to use for deploying in Kubernetes. The concept with this app is that you inject a sidecar to the external-secrets deployment. This makes it possible for the External Secrets Operator to communicate over localhost, that leads to the benefit of not having to open any port to gopass. This makes it impossible for other apps to gain access to your secrets.
 
 ## Configuration
-You need to deploy one secret manually to set the necessary secret parameters for gopass. If yoy want to use the example deployment that manifest must look like this:
+You need to deploy one secret manually to set the necessary secret parameters for gopass. If you want to use the example deployment that manifest must look like this:
 
 ``` yaml
 apiVersion: v1
@@ -43,3 +43,11 @@ data:
 * `gpgSecret`: The pgp key used to extract the secrets. Use the following command to genererate the input for this variable: `gpg --export-secret-keys -a <KEY_ID> | base64 -w 0`
 * `gpgKeyId`: The ID of the pgp key.
 * `secretsRepoUrl`: The URL for the repo containing the gopass secrets. Note: cannot be accessed over SSH. 
+
+## Other configuration
+In the [kustomization file](deployment/kustomization.yaml) you have a few other configuration parameters. 
+* `GOPASS_PREFIX`: Must be the same string as `prefix` defined in [Gopass settings](#Gopass settings). `default: external-secrets`
+* `AUTH_ACTIVE`: Set if basic auth should be enabled for every request. Not needed when running in sidecar mode. `default: false`
+* `GIT_COOLDOWN`: When a parameter does not exist in the local gopass store, a pull will be performed if there hasn't been a pull done for `GIT_COOLDOWN` minutes. `default: 5`
+* `GIT_PULL_CRON`: Cron schedule for for pulling new passwords. `default: */15 * * * *`
+* `LOG_LEVEL`: Log level in the container. `default: info`
