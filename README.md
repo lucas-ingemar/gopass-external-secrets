@@ -14,5 +14,5 @@
 
   <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/lucas-ingemar/gopass-external-secrets/go-test.yaml?style=flat-square&logo=github&label=Tests">
 
-  <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/lucas-ingemar/gopass-external-secrets/publish-container.yaml?style=flat-square&logo=github&label=Tests">
+  <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/lucas-ingemar/gopass-external-secrets/publish-container.yaml?style=flat-square&logo=github&label=Build">
 </p>
