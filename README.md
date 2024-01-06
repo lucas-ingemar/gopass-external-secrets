@@ -51,3 +51,44 @@ In the [kustomization file](deployment/kustomization.yaml) you have a few other 
 * `GIT_COOLDOWN`: When a parameter does not exist in the local gopass store, a pull will be performed if there hasn't been a pull done for `GIT_COOLDOWN` minutes. `default: 5`
 * `GIT_PULL_CRON`: Cron schedule for for pulling new passwords. `default: */15 * * * *`
 * `LOG_LEVEL`: Log level in the container. `default: info`
+
+## Gopass settings
+There is a [file](.gopass/create/2-external-secret.yml) with a predefined template of creating new secrets with `gopass create --store <your external-secrets store>`. Just place the file in `<gopass-repository>/.gopass/create/`. Evrery time you create a new password you can use this template to create secrets on the correct format.
+
+## ExternalSecret example
+``` yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: webhook-example
+  namespace: testing
+spec:
+  refreshInterval: "15s"
+  secretStoreRef:
+    name: gopass
+    kind: ClusterSecretStore
+  target:
+    name: webhook-example
+  data:
+  - secretKey: username
+    remoteRef:
+      key: testing/webhook-example
+      property: username
+  - secretKey: password
+    remoteRef:
+      key: testing/webhook-example
+      property: password
+```
+The design of this app is that the key has the format `namespace/secret` and everything stored in the secret is `property`. For this particular example the output of `gopass ls` looks the following:
+
+``` bash
+  gopass ls
+gopass
+└── k8s_test_secrets (/home/username/.local/share/gopass/stores/k8s_test_secrets)
+    └── external-secrets/
+        └── testing/
+            └── webhook-example
+
+```
+
+
