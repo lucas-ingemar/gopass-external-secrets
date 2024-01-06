@@ -8,15 +8,15 @@ resources:
 images:
   - name: ghcr.io/external-secrets/external-secrets
     newTag: v0.9.10
-  - name: gopass-external-secrets
-    newTag: b15
+  - name: ghcr.io/lucas-ingemar/gopass-external-secrets
+    newTag: v1.0.0
 patches:
   - patch: |
       - op: add
         path: /spec/template/spec/containers/-
         value:
             name: gopass-external-secrets
-            image: gopass-external-secrets:b5
+            image: ghcr.io/lucas-ingemar/gopass-external-secrets:v1.0.0
             env:
             - name: GOPASS_PREFIX
               value: "external-secrets"
@@ -27,7 +27,7 @@ patches:
             - name: GIT_PULL_CRON
               value: "*/15 * * * *"
             - name: LOG_LEVEL
-              value: "debug"
+              value: "info"
             - name: GPG_SECRET
               valueFrom:
                 secretKeyRef:
