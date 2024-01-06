@@ -82,7 +82,7 @@ spec:
 The design of this app is that the key has the format `namespace/secret` and everything stored in the secret is `property`. For this particular example the output of `gopass ls` looks the following:
 
 ``` bash
-  gopass ls
+ $ gopass ls
 gopass
 └── k8s_test_secrets (/home/username/.local/share/gopass/stores/k8s_test_secrets)
     └── external-secrets/
